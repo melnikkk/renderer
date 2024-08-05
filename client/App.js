@@ -1,5 +1,5 @@
 import { List } from "./components/List";
-import { Select } from "./components/Select/Select.js";
+import { Select } from "./components/Select";
 import { LIST_TYPE } from "./constants.js";
 import {Counter} from "./components/Counter";
 
