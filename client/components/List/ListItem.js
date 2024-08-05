@@ -6,4 +6,4 @@ export const ListItem = (props) => {
   return { element, props }
 }
 
-ListItem.render = ({ element, props }) => {}
+ListItem.render = () => {}

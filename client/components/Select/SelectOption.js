@@ -1,8 +1,9 @@
 export const SelectOption = (props) => {
   const selectOption = document.createElement('option')
 
-  selectOption.value = props.option.value
-  selectOption.label = props.option.label
+  selectOption.value = props.value
+  selectOption.label = props.label
+  selectOption.selected = props.selected
 
   return { element: selectOption, props }
 }

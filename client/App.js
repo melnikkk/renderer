@@ -1,16 +1,18 @@
-import { List } from "./List.js";
-import { Select } from "./Select.js";
+import { List } from "./components/List";
+import { Select } from "./components/Select/Select.js";
+import { LIST_TYPE } from "./constants.js";
+import {Counter} from "./components/Counter";
 
-export const App = () => {
+export const App = (_props, { rerender }) => {
   const element = document.createElement('div')
-  const title = document.createElement('h1')
-
-  title.innerText = 'Hello World!'
-
-  element.append(title)
 
   const localState = {
-    currentList: 'first'
+    selectedList: LIST_TYPE.FIRST,
+    setSelectedList(listType) {
+      this.selectedList = listType
+
+      rerender()
+    }
   }
 
   return { element, localState }
@@ -18,20 +20,59 @@ export const App = () => {
 
 App.render = ({ element, localState, renderer }) => {
   const onSelectValueChange = (e) => {
-    const selectedValue = e.target.value
-
-    localState.currentList = selectedValue
-
-    console.log(selectedValue)
-
-    // renderer.rerender()
+    localState.setSelectedList(e.target.value)
   }
 
-  const list = renderer.createComponent(List)
+  const list = renderer.createComponent(List, {
+    items: [
+      {
+        title: 'First Item'
+      },
+      {
+        title: 'Second Item'
+      },
+    ]
+  })
   const select = renderer.createComponent(Select, {
+    options: [
+      {
+        label: 'First Option',
+        value: LIST_TYPE.FIRST,
+      },
+      {
+        label: 'Second Option',
+        value: LIST_TYPE.SECOND,
+      },
+      {
+        label: 'Third Option',
+        value: LIST_TYPE.THIRD,
+      },
+    ],
+    selectedOption: localState.selectedList,
     onChange: onSelectValueChange,
   })
+  const counter = renderer.createComponent(Counter)
 
   element.append(select.element)
-  element.append(list.element)
+
+  const title = document.createElement('h1')
+
+  switch (localState.selectedList) {
+    case LIST_TYPE.THIRD:
+      title.innerText = 'THIRD!'
+      element.append(title)
+      break
+    case LIST_TYPE.SECOND:
+      title.innerText = 'Counter'
+      element.append(counter.element)
+      break
+    case LIST_TYPE.FIRST:
+    default:
+      title.innerText = 'List'
+      element.append(title)
+      element.append(list.element)
+      break
+  }
+
+
 }
